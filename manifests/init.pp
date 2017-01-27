@@ -11,7 +11,11 @@ class drupal_solr (
   include packagecloud
 
   packagecloud::repo { "zivtech/solr":
-      type => 'deb',
+    type => 'deb',
+  }->
+
+  package { 'solr':
+    ensure => 'present',
   }
 
   file { '/usr/local/bin/create-solr-instance':
