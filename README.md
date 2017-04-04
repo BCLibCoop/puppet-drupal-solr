@@ -19,9 +19,9 @@ include drupal_solr
 
 ```` puppet
 class { 'drupal_solr':
-  user => 'tomcat6',
-  group => 'some_website_admin_group',
-}
+      tomcatuser => 'tomcat6',
+      webadmingroup => 'some_website_admin_group',
+    }
 ````
 
 ## Dependencies
@@ -29,28 +29,29 @@ class { 'drupal_solr':
 This module relies on
  [puppetlabs/vcsrepo](https://forge.puppetlabs.com/puppetlabs/vcsrepo) and [rodjek/logrotate](https://github.com/rodjek/puppet-logrotate).
 
-## Using the setup once installed
-
-### Creating a solr instance
+## Creating a solr instance
 
 This module supports creating multiple solr instances all of which are added to
 and managed by tomcat.  Once you use this module to install solr you can create
 specific instances like so:
 
-```` bash
-create-solr-instance mysite 7 sapi
+```` puppet
+drupal_solr::instance { 'drupal': }
 ````
 
-This will create a solr instance with the
-[search_api](http://drupal.org/project/search_api) schema appropriate for Drupal
-7.
+## Advanced solr instances
 
-### Removing a solr instance
-
-You can remove the solr instance from tomcat and delete all data inside the index
-with the following command:
-
-```` bash
-remove-solr-instance mysite
+```` puppet
+    drupal_solr::instance { 'drupal':
+      # Drupal 7
+      version => 7,
+      # Not using Search API
+      sapi => false,
+    }
 ````
 
+## Removing a solr instance
+
+```` puppet
+    drupal_solr::instance { 'drupal': ensure => absent }
+````
